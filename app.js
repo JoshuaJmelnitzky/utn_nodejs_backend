@@ -1,23 +1,14 @@
-const readlineSync = require('readline-sync');
-const { generarNumeroAleatorio, verificarAdivinanza } = require('./adivinanza');
+const http = require('http');
 
-const obtenerNumeroUsuario = () => {
-    return readlineSync.question('Ingresa un número: ');
-};
+const hostname = '127.0.0.1';
+const port = 3000;
 
+const server = http.createServer((_, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end('{ "mensaje": "Hola Mundo!!"}');
+});
 
-const juegoAdivinanza = () => {
-    const numeroSecreto = generarNumeroAleatorio();
-    let numeroAdivinado = 0;
-
-    console.log('¡Bienvenido a Adivina el número secreto!');
-    console.log('Intenta adivinar el número del 1 al 100.\n');
-
-    while (numeroAdivinado !== numeroSecreto) {
-        numeroAdivinado = parseInt(obtenerNumeroUsuario());
-        verificarAdivinanza(numeroSecreto, numeroAdivinado);
-    }
-};
-
-
-juegoAdivinanza();
+server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
