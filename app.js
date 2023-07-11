@@ -1,14 +1,13 @@
-const http = require('http');
+const express = require('express');
+const app = express();
+app.use(express.json());
+// Importamos el Router de Libros
+const librosRouter = require('./routes/libros');
+// Importamos el Middleware Error Handler
+const errorHandler = require('./middlewares/errorHandler');
 
-const hostname = '127.0.0.1';
-const port = 3000;
-
-const server = http.createServer((_, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.end('{ "mensaje": "Hola Mundo!!"}');
-});
-
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.use('/libros', librosRouter);
+app.use(errorHandler);
+app.listen(3000, () => {
+    console.log('Servidor iniciado en el puerto 3000');
 });
