@@ -2,11 +2,11 @@ const { Database } = require("../../db/connection");
 const { ClientMongoDB } = require("../../db/mongo");
 const { bookSchema } = require("../../db/models/libro");
 
-const connect = Database.getConnection();
+Database.getConnection();
 
 class ProductDaoMongoDB {
     constructor() {
-        this.clientMongoDB = new ClientMongoDB(bookSchema, connect);
+        this.clientMongoDB = new ClientMongoDB(bookSchema);
     };
 
     async getBooks() {

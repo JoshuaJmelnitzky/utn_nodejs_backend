@@ -2,57 +2,53 @@ const { BookService } = require("./librosService");
 
 const bookService = new BookService();
 
-const getBooks = async (_, res) => {
+const getBooks = async (_, res, next) => {
     try {
         const allBooks = await bookService.getBooks();
-        res.status(200).send(allBooks);
+        
+        res.status(200).json(allBooks);
     } catch (e) {
-        res.status(500).json({ "error": "Error al listar libros" });
+        next(e);
     };
 };
 
-const getBookById = async (req, res) => {
+const getBookById = async (req, res, next) => {
     try {
         const findBook = await bookService.getBookById(req.params.id);
 
-        if (!findBook) return res.status(404).send("Libro no encontrado");
-
-        res.status(200).send(findBook);
+        res.status(200).json(findBook);
     } catch (e) {
-        res.status(500).json({ "error": "Error al buscar libro por id" });
-    }
-};
-
-const saveBook = async (req, res) => {
-    try {
-        const addBook = await bookService.saveBook(req.body);
-        res.status(201).send(addBook);
-    } catch (e) {
-        res.status(500).json({ "error": "Error al guardar el libro" });
+        next(e);
     };
 };
 
-const updateBookById = async (req, res) => {
+const saveBook = async (req, res, next) => {
+    try {
+        const addBook = await bookService.saveBook(req.body);
+
+        res.status(201).json(addBook);
+    } catch (e) {
+        next(e);
+    };
+};
+
+const updateBookById = async (req, res, next) => {
     try {
         const updateBook = await bookService.updateBookById(req.params.id, req.body);
 
-        if (!updateBook) return res.status(404).send("Libro no encontrado");
-
-        res.send(updateBook);
+        res.status(200).json(updateBook);
     } catch (e) {
-        res.status(500).json({ "error": "Error al actualizar el libro" });
+        next(e);
     };
 };
 
-const deleteBookById = async (req, res) => {
+const deleteBookById = async (req, res, next) => {
     try {
         const deleteBook = await bookService.deleteBookById(req.params.id);
 
-        if (!deleteBook) return res.status(404).send("Libro no encontrado");
-
-        res.send(deleteBook);
+        res.status(200).json(deleteBook);
     } catch (e) {
-        res.status(500).json({ "error": "Error al borrar el libro" });
+        next(e);
     };
 };
 
